@@ -67,7 +67,7 @@ const page = () => {
                 }}
                 placeholder="Email"
                 name="email"
-                id=""
+                id="email"
               />
               <Input
                 className="w-80 xl:w-[600px] border border-gray-300 rounded p-1"
@@ -77,7 +77,7 @@ const page = () => {
                 }}
                 placeholder="Password"
                 name="password"
-                id=""
+                id="password"
               />
             </div>
             <Button size="md" className="max-w-40">
