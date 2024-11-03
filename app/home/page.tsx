@@ -192,7 +192,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [name, category, image ]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
