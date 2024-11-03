@@ -194,17 +194,6 @@ const Page = () => {
     fetchProducts();
   }, []);
 
-  // Fetch data on component mount
-  // useEffect(() => {
-  //   const fetchFeaturedProducts = async () => {
-  //     const res = await fetch("http://localhost:3001/api/products"); // Replace with your API endpoint
-  //     const data = await res.json();
-  //     setFeaturedProducts(data);
-  //   };
-
-  //   fetchFeaturedProducts();
-  // }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
