@@ -2,9 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
@@ -19,7 +17,12 @@ const page = () => {
   const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/signup", { firstName, lastName, email, password })
+      .post("http://localhost:3001/signup", {
+        firstName,
+        lastName,
+        email,
+        password,
+      })
       .then((result) => {
         if (result.status === 201) {
           router.push("/login");
@@ -33,16 +36,6 @@ const page = () => {
         }
       });
   };
-
-  // async function submit(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-
-  //   try {
-  //     await axios.post("http://localhost:8000/signup", { email, password });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 
   return (
     <motion.section
@@ -63,7 +56,7 @@ const page = () => {
             <h3 className="text-4xl text-fuchsia-500">Signup</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-            <Input
+              <Input
                 className="w-80 xl:w-[600px] border border-gray-300 rounded p-1"
                 type="text"
                 onChange={(e) => {
@@ -108,19 +101,6 @@ const page = () => {
               Signup
             </Button>
           </form>
-
-          {/* <br />
-          <p>OR</p>
-
-          <Link href="/signup">Signup Page</Link>
-
-          <h2>Login with Google</h2>
-          <div>
-            <button className="flex items-center gap-2">
-              <FcGoogle />
-              Login
-            </button>
-          </div> */}
         </div>
       </div>
     </motion.section>

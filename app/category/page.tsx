@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Head from "next/head";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,6 @@ const Page = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
-  const router = useRouter();
 
   const fetchCategories = async () => {
     const response = await fetch("http://localhost:3001/api/categories");
@@ -93,27 +91,6 @@ const Page = () => {
             </form>
           </div>
         </div>
-
-        {/* <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.length > 0 ? (
-              categories.map((category) => (
-                <div
-                  key={category._id}
-                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                  onClick={() => router.push(`/category/${category._id}`)}
-                >
-                  <h2 className="text-xl font-semibold text-fuchsia-600">
-                    {category.name}
-                  </h2>
-                  <p className="text-gray-600 mt-2">{category.description}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No categories available.</p>
-            )}
-          </div>
-        </div> */}
 
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 bg-white">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">
