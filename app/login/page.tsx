@@ -5,12 +5,9 @@ import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 import axios from "axios";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const page = () => {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
@@ -28,16 +25,6 @@ const page = () => {
       })
       .catch((err) => console.log(err));
   };
-
-  // async function submit(e: React.FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-
-  //   try {
-  //     await axios.post("http://localhost:8000/", { email, password });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
 
   return (
     <motion.section
@@ -58,7 +45,6 @@ const page = () => {
             <h3 className="text-4xl text-fuchsia-500">Login</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
-            
               <Input
                 className="w-80 xl:w-[600px] border border-gray-300 rounded p-1"
                 type="email"
