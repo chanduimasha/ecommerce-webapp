@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface Category {
-  _id: string;
+  id: string;
   category: string;
   image: string;
 }
@@ -33,7 +33,7 @@ const Page = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, category, image }),
+      body: JSON.stringify({ category, image }),
     });
 
     if (response.ok) {
@@ -99,7 +99,7 @@ const Page = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category, index) => (
               <div
-                key={category._id || index}
+                key={index}
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
                 <img

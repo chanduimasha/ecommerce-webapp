@@ -17,7 +17,7 @@ interface Product {
 
 const Page = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -84,8 +84,8 @@ const Page = () => {
                   type="text"
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  // value={searchQuery}
+                  // onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Search
                   className="absolute right-3 top-2.5 text-gray-400"
@@ -122,7 +122,7 @@ const Page = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Welcome Section */}
       <div className="bg-fuchsia-600 text-white">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -194,7 +194,7 @@ const Page = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProducts.map((product, index) => (
             <div
-              key={product.id || index}
+              key={index}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
               <img
