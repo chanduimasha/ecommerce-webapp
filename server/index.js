@@ -77,29 +77,21 @@ mongoose
   .catch((error) => console.error("MongoDB connection error:", error));
 
 // Product Schema
-const productSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  category: { type: String, required: true },
-  image: { type: String, required: true },
-  // description: String,
-  // inStock: { type: Boolean, default: true },
-  // createdAt: { type: Date, default: Date.now },
-});
+// const productSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   price: { type: Number, required: true },
+//   category: { type: String, required: true },
+//   image: { type: String, required: true },
+// });
 
-const Product = mongoose.model("Product", productSchema);
+// const Product = mongoose.model("Product", productSchema);
 
-const categorySchema = new mongoose.Schema({
-  // name: { type: String, required: true },
-  // price: { type: Number, required: true },
-  category: { type: String, required: true },
-  image: { type: String, required: true },
-  // description: String,
-  // inStock: { type: Boolean, default: true },
-  // createdAt: { type: Date, default: Date.now },
-});
+// const categorySchema = new mongoose.Schema({
+//   category: { type: String, required: true },
+//   image: { type: String, required: true },
+// });
 
-const Category = mongoose.model("Category", categorySchema);
+// const Category = mongoose.model("Category", categorySchema);
 
 // Routes for products
 app.get("/api/products", async (req, res) => {
@@ -125,7 +117,7 @@ app.get("/api/products", async (req, res) => {
 // });
 
 app.post("/api/products", async (req, res) => {
-  const product = new Product({
+  const product = new ProductModel({
     name: req.body.name,
     price: req.body.price,
     category: req.body.category,
@@ -189,7 +181,7 @@ app.get("/api/categories", async (req, res) => {
 
 app.post("/api/categories", async (req, res) => {
 
-  const category = new Category({
+  const category = new CategoryModel({
     category: req.body.category,
     // description: req.body.description,
     image: req.body.image,
