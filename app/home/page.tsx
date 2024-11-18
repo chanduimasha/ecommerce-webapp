@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { ShoppingCart, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { ShoppingCart, Search, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ProductModal from "@/components/ProductModal";
 
 interface Product {
-  id: number;
+  _id: number;
   name: string;
   price: number;
   image: string;
@@ -17,12 +18,9 @@ interface Product {
 
 const Page = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  // const [searchQuery, setSearchQuery] = useState("");
-
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
-  const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const fetchProducts = async () => {
     const response = await fetch("http://localhost:3001/api/products");
@@ -34,26 +32,58 @@ const Page = () => {
     setFeaturedProducts(data);
   };
 
-  const handleCreateProducts = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:3001/api/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, price, image, category }),
-    });
+  const handleAddToCart = async (product: Product) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+        }),
+      });
 
-    if (response.ok) {
-      // Optionally clear the input fields or fetch the updated categories
-      fetchProducts();
-      setName("");
-      setPrice("");
-      setImage("");
-      setCategory("");
-    } else {
-      console.error("Failed to create products. Status:", response.status);
+      if (!response.ok) {
+        throw new Error("Failed to add item to cart");
+      }
+      console.log("Item added to cart successfully");
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
     }
+  };
+
+  const handleRemove = async (itemId: number) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/products/${itemId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to remove product");
+      }
+
+      setFeaturedProducts((prevItems) =>
+        prevItems.filter((product) => product._id !== itemId)
+      );
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    }
+  };
+
+  const handleViewCart = () => {
+    router.push("/cart");
+  };
+
+  const handleProductClick = (productId: number) => {
+    router.push(`/home/${productId}`);
   };
 
   useEffect(() => {
@@ -78,14 +108,14 @@ const Page = () => {
             </div>
 
             {/* Search Bar */}
-            <div className="flex-1 max-w-lg mx-8">
+            <div className="flex-1 max-w-lg mx-8 text-primary">
               <div className="relative">
                 <input
                   type="text"
                   className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Search products..."
-                  // value={searchQuery}
-                  // onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Search
                   className="absolute right-3 top-2.5 text-gray-400"
@@ -96,6 +126,12 @@ const Page = () => {
 
             {/* Navigation Links */}
             <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="text-gray-600 hover:text-fuchsia-600"
+              >
+                Create Products
+              </button>
               <Link
                 href="/category"
                 className="text-gray-600 hover:text-fuchsia-600"
@@ -130,59 +166,10 @@ const Page = () => {
             <p className="text-xl mb-8">
               Discover the latest in technology and electronics
             </p>
-            <button className="bg-white text-fuchsia-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+            <Link href="/category" className="bg-white text-fuchsia-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
               Shop Now
-            </button>
+            </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Input Form to create category */}
-      <div className="container mx-auto">
-        <div className="xl:w-[100%]">
-          <form onSubmit={handleCreateProducts} className="mb-8 mt-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 font-primary">
-              <Input
-                type="text"
-                placeholder="Product Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="p-2 border border-gray-300 rounded"
-              />
-              <Input
-                type="text"
-                placeholder="Category Name"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                required
-                className="p-2 border border-gray-300 rounded"
-              />
-              <Input
-                type="text"
-                placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="p-2 border border-gray-300 rounded"
-              />
-              <Input
-                type="text"
-                placeholder="Image URL"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="p-2 border border-gray-300 rounded"
-              />
-            </div>
-
-            <div className="flex justify-center mt-4">
-              <Button
-                type="submit"
-                className="bg-fuchsia-600 text-primary p-2 rounded-full w-[300px]"
-              >
-                Create Products
-              </Button>
-            </div>
-          </form>
         </div>
       </div>
 
@@ -192,34 +179,70 @@ const Page = () => {
           Featured Products
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {product.name}
-                </h3>
-                <p className="text-gray-600">{product.category}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xl font-bold text-fuchsia-600">
-                    ${product.price}
-                  </span>
-                  <button className="bg-fuchsia-600 text-white px-4 py-2 rounded-lg hover:bg-fuchsia-600 transition-colors">
+          {featuredProducts
+            .filter((product) =>
+              product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .map((product) => (
+              <div
+                key={product._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform duration-200 hover:scale-105"
+              >
+                <div onClick={() => handleProductClick(product._id)}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-900 hover:text-fuchsia-600">
+                      {product.name}
+                    </h3>
+                    <p className="text-gray-600">{product.category}</p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-xl font-bold text-fuchsia-600">
+                        ${product.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-4 pb-4">
+                  <Button
+                    onClick={() => handleAddToCart(product)}
+                    className="w-[70%] bg-fuchsia-600 text-white px-4 py-2 rounded-lg hover:bg-fuchsia-700 transition-colors"
+                  >
+                    <ShoppingCart className="mx-2" size={20} />
                     Add to Cart
-                  </button>
+                  </Button>
+                  <span className="px-3"></span>
+                  <Button
+                    onClick={() => handleRemove(product._id)}
+                    className="w-[20%] bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-900 transition-colors"
+                  >
+                    <TrashIcon className="w-5 h-4" />
+                  </Button>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
+
+      {/* Cart Button */}
+      <div className="fixed bottom-4 right-4">
+        <Button
+          onClick={handleViewCart}
+          className="bg-fuchsia-600 text-white px-4 py-2 rounded-full shadow-md hover:bg-fuchsia-700 transition-colors"
+        >
+          <ShoppingCart className="w-6 h-6" />
+        </Button>
+      </div>
+
+      {/* Product Modal */}
+      <ProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onProductCreated={fetchProducts}
+      />
     </div>
   );
 };
