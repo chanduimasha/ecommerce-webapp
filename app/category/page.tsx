@@ -96,12 +96,12 @@ const Page = () => {
               >
                 Create Categories
               </button>
-              <Link
+              {/* <Link
                 href="/deals"
                 className="text-gray-600 hover:text-fuchsia-600"
               >
                 Deals
-              </Link>
+              </Link> */}
               <Link
                 href="/cart"
                 className="relative text-gray-600 hover:text-fuchsia-600"
