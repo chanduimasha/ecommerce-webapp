@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ShoppingCart, Search, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ProductModal from "@/components/ProductModal";
+import ProductModel from "@/server/model/Products";
 
 interface Product {
   _id: number;
@@ -14,6 +15,7 @@ interface Product {
   price: number;
   image: string;
   category: string;
+  quantity: number;
 }
 
 const Page = () => {
@@ -138,12 +140,12 @@ const Page = () => {
               >
                 Categories
               </Link>
-              <Link
+              {/* <Link
                 href="/deals"
                 className="text-gray-600 hover:text-fuchsia-600"
               >
                 Deals
-              </Link>
+              </Link> */}
               <Link
                 href="/cart"
                 className="relative text-gray-600 hover:text-fuchsia-600"
@@ -166,7 +168,10 @@ const Page = () => {
             <p className="text-xl mb-8">
               Discover the latest in technology and electronics
             </p>
-            <Link href="/category" className="bg-white text-fuchsia-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+            <Link
+              href="/category"
+              className="bg-white text-fuchsia-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
               Shop Now
             </Link>
           </div>
